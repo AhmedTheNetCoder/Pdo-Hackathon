@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Twitter Sentiment Dashboard</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e6f7f1, #f0f4ff);
+            color: #333;
+            font-family: 'DIN Next', 'Roboto', sans-serif;
+            position: relative;
+            overflow: auto;
+        }
+        .navbar-dark {
+            background-color: #17522b !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        footer {
+            background-color: #17522b !important;
+            color: #e0e0e0;
+        }
+        h1, h2, p, a {
+            color: #333;
+        }
+        .chart-box, .card {
+            border: 2px solid #17522b;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .chart-box:hover, .card:hover {
+            transform: scale(1.05);
+        }
+        .card-header {
+            background-color: #17522b;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .small-card {
+            border: 2px solid #17522b;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #17522b;
+        }
+    </style>
+<style>
+    /* Center and enlarge the canvas within the card */
+    #companyTrendChart {
+        margin-top: 80px; /* Adjust for vertical alignment */
+        max-width: 90%;    /* Increased width for larger display */
+        height: 300px;     /* Make the chart taller for better visibility */
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}"><img src="/static/images/IMG_7057.PNG" alt="Emotion Engine Logo">Emotion Engine</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('tweet_sentiment_scale') }}">Tweet Sentiment Scale</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-center">Twitter Sentiment Dashboard</h1>
+
+        <!-- Small Cards Section -->
+        <div class="row mt-4 text-center">
+            <div class="col-md-4">
+                <div class="small-card">
+                    <h5>Total Tweets</h5>
+                    <p>500</p> <!-- Example number, replace with actual data -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-card">
+                    <h5>Total Sentiment</h5>
+                    <p>1200</p> <!-- Example number, replace with actual data -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-card">
+                    <h5>Average Tweets</h5>
+                    <p>20</p> <!-- Example number, replace with actual data -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="row mt-4">
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('sentiment_overview') }}">
+                    <div id="chart-container" class="chart-box" onclick="toggleExpand(this)">
+                        <div class="card-header">Sentiment Overview</div>
+                        <canvas id="sentimentChart" style="max-height: 350px;"></canvas>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('sentiment_trend') }}">
+                    <div id="trend-chart-container" class="chart-box" onclick="toggleExpand(this)">
+                        <div class="card-header">Sentiment Trend</div>
+                        <canvas id="trendChart" style="max-height: 350px;"></canvas>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('network_graph') }}">
+                    <div id="company-trend-container" class="chart-box" onclick="toggleExpand(this)">
+                        <div class="card-header">Company Trends</div>
+                        <canvas id="companyTrendChart" style="margin-top: 80px; max-width: 90%; margin-left: auto; margin-right: auto;"></canvas>
+                    </div>
+                </a>
+            </div>
+
+        <footer class="text-white text-center py-3 mt-5">
+            <p>&copy; 2024 PDO. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script>
+        function toggleUpload() {
+            document.getElementById('upload-section').style.display = 'block';
+            document.getElementById('filter-section').style.display = 'none';
+        }
+
+        function toggleFilter() {
+            document.getElementById('upload-section').style.display = 'none';
+            document.getElementById('filter-section').style.display = 'block';
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file-upload');
+            if (fileInput.files.length > 0) {
+                console.log('File selected:', fileInput.files[0].name);
+                // Add logic to upload the file here
+            } else {
+                console.log('No file selected.');
+            }
+        }
+
+        document.getElementById('dataFilter').addEventListener('change', function() {
+            const filterValue = this.value;
+            console.log('Filter selected:', filterValue);
+        });
+
+        document.getElementById('startDate').addEventListener('change', function() {
+            console.log('Start date selected:', this.value);
+        });
+
+        document.getElementById('endDate').addEventListener('change', function() {
+            console.log('End date selected:', this.value);
+        });
+
+        function toggleExpand(card) {
+            card.classList.toggle('expanded');
+        }
+    </script>
+    <script>
+        function navigateToPage() {
+            const selectedValue = document.getElementById('dataFilter').value;
+            if (selectedValue === 'twitter') {
+                // Redirect to the Flask route for index3.html
+                window.location.href = "{{ url_for('index3') }}";
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    // Reduced to top 3 companies with example data
+    const companyData = {
+        labels: ['PDO', 'Omantel', 'NBO'],
+        datasets: [{
+            label: 'Mentions',
+            data: [120, 80, 90], // Replace with actual mention counts
+            backgroundColor: ['#4CAF50', '#FFEB3B', '#F44336']
+        }]
+    };
+
+    const ctx = document.getElementById('companyTrendChart').getContext('2d');
+    const companyTrendChart = new Chart(ctx, {
+        type: 'bar',
+        data: companyData,
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Companies'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of Mentions'
+                    },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + ' mentions';
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+    </script>
+    
+</body>
+</html>

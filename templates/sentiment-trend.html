@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Trend Visualization</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'DIN Next', 'Roboto', sans-serif;
+            background-color: #f0f4ff;
+            color: #333;
+            overflow: auto;
+        }
+        .navbar-dark {
+            background-color: #17522b !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        footer {
+            background-color: #17522b !important;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 15px;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        #sentiment-trend-chart {
+            height: 600px;
+            width: 100%;
+        }
+        .text-center {
+            font-size: 3em; /* Adjust the size as needed */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}">
+            <img src="/static/images/IMG_7057.PNG" alt="Emotion Engine Logo">
+            Emotion Engine
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" >
+        <h1 class="text-center">PDO X Account Tweets Sentiments Headcounts</h1>
+        <div id="sentiment-trend-chart"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 PDO. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript to Load Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sample data for sentiment trends over the months
+            var data = [
+                {
+                    x: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    y: [30, 50, 40, 60, 80, 70, 50, 65, 85, 95, 60, 75],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Positive',
+                    line: { color: '#66b3ff' }
+                },
+                {
+                    x: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    y: [20, 30, 25, 35, 45, 40, 30, 25, 40, 50, 35, 40],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Neutral',
+                    line: { color: '#ffcc99' }
+                },
+                {
+                    x: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    y: [10, 20, 15, 25, 30, 25, 20, 15, 25, 30, 20, 25],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Negative',
+                    line: { color: '#ff6666' }
+                }
+            ];
+
+            var layout = {
+                title: 'Monthly Sentiment Trend',
+                xaxis: {
+                    title: '2023 Months'
+                },
+                yaxis: {
+                    title: 'Number of Sentiments'
+                },
+                margin: {
+                    l: 50,
+                    r: 50,
+                    b: 100,
+                    t: 50,
+                    pad: 4
+                }
+            };
+
+            Plotly.newPlot('sentiment-trend-chart', data, layout);
+        });
+    </script>
+</body>
+</html>

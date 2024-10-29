@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Sentiment Overview - Emotion Engine Dashboard</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e6f7f1, #f0f4ff);
+            color: #333;
+            font-family: 'DIN Next', 'Roboto', sans-serif;
+            position: relative;
+            overflow: auto;
+        }
+        .navbar-dark {
+            background-color: #17522b !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        footer {
+            background-color: #17522b !important;
+            color: #e0e0e0;
+        }
+        h1, h2, p, a {
+            color: #333;
+        }
+        .wordcloud-box {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #17522b;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}"><img src="/static/images/IMG_7057.PNG" alt="Emotion Engine Logo">Emotion Engine</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Sentiment Overview</h1>
+
+        <!-- Word Cloud Section -->
+        <div class="wordcloud-box">
+            <h3>Word Cloud Representation</h3>
+            <img src="/static/images/surveywordcloud.png" alt="Word Cloud" class="img-fluid">
+        </div>
+
+        <!-- Additional Sentiment Information -->
+        <div class="mt-4">
+            <h3>Sentiment Analysis Details</h3>
+            <p>Below are some of the recent comments collected from the PDO Hackathon survey to illustrate the overall sentiment:</p>
+            <div style="overflow-x:auto;">
+                <table class="table table-light table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Sentiment</th>
+                            <th>Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Positive</td>
+                            <td>Meeting new people and engaging with them</td>
+                        </tr>
+                        <tr>
+                            <td>Positive</td>
+                            <td>Energetic people in one room</td>
+                        </tr>
+                        <tr>
+                            <td>Negative</td>
+                            <td>Challenging. Putting together a team was difficult. Organizing tasks was challenging </td>
+                        </tr>
+                        <tr>
+                            <td>Positive</td>
+                            <td>It was Great</td>
+                        </tr>
+                        <tr>
+                            <td>Neutral</td>
+                            <td>Good</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-white text-center py-3 mt-5">
+        <p>&copy; 2024 PDO. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

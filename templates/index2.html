@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>Emotion Engine</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e6f7f1, #f0f4ff);
+            color: #333;
+            font-family: 'DIN Next', 'Roboto', sans-serif;
+            position: relative;
+            overflow: auto;
+        }
+        .navbar-dark {
+            background-color: #17522b !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        footer {
+            background-color: #17522b !important;
+            color: #e0e0e0;
+        }
+        h1, h2, p, a {
+            color: #333;
+        }
+        .chart-box, .card {
+            border: 2px solid #17522b;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s, width 0.3s;
+            padding: 20px;
+            height: 500px;
+            width: 100%;
+            cursor: pointer;
+            position: relative;
+        }
+        .chart-box:hover, .card:hover {
+            transform: scale(1.05);
+        }
+        .card-header {
+            background-color: #17522b;
+            color: #fff;
+            font-weight: bold;
+        }
+        .expanded {
+            width: 120% !important;
+            transform: scale(1.05) !important;
+            z-index: 10;
+        }
+        .small-card {
+            border: 2px solid #17522b;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #17522b;
+        }
+    </style>
+    <style>
+
+    .card-header {
+        background-color: #17522b;
+        color: #fff;
+        font-weight: bold;
+        width: 100%;
+        padding: 10px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        text-align: center;
+    }
+
+    #happinessBarChart {
+    margin-top: 50px; /* Adjust to control spacing */
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#happinessScoreText {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 20px; /* Adds space between chart and text */
+}
+</style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}"><img src="/static/images/IMG_7057.PNG" alt="Emotion Engine Logo">Emotion Engine</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Emotion Engine - Survey Dashboard</h1>
+
+        <!-- Small Cards Section -->
+        <div class="row mt-4 text-center">
+            <div class="col-md-4">
+                <div class="small-card">
+                    <h5>Total Respondents</h5>
+                    <p>42</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-card">
+                    <h5>Total Sentiments</h5>
+                    <p>3500</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-card">
+                    <h5>Average Responses</h5>
+                    <p>10</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="row mt-4">
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('Pdo_Hackathon') }}">
+                    <div id="chart-container" class="chart-box" onclick="toggleExpand(this)">
+                        <div class="card-header">Survey Sentiment Overview</div>
+                        <canvas id="sentimentChart" style="max-height: 350px;"></canvas>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('sentiment_trend') }}">
+                    <div id="happiness-bar-container" class="chart-box" onclick="toggleExpand(this)">
+                        <div class="card-header">Happiness Level</div>
+                        <canvas id="happinessBarChart" style="max-height: 350px;"></canvas>
+                        <p id="happinessScoreText" class="mt-3"></p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('network_graph') }}">
+                    <div id="top-comments-container" class="chart-box" onclick="toggleExpand(this)">
+                        <div class="card-header">Top Comments</div>
+                        <div class="card-body">
+                            <p>Here are some highlighted comments from recent events:</p>
+                            <ul class="list-group" style="max-height: 250px; overflow-y: auto;">
+                                <li class="list-group-item">"The event was incredibly insightful!"</li>
+                                <li class="list-group-item">"Loved the interactive sessions, learned a lot."</li>
+                                <li class="list-group-item">"Great speakers and well-organized."</li>
+                                <li class="list-group-item">"Would love to attend again next year!"</li>
+                                <li class="list-group-item">"Very informative, but could use more networking opportunities."</li>
+                                <li class="list-group-item">"The workshops were hands-on and helpful!"</li>
+                                <li class="list-group-item">"Amazing experience, looking forward to more!"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            </div>
+                    
+        </div>
+
+        <footer class="text-white text-center py-3 mt-5">
+            <p>&copy; 2024 PDO. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        function toggleUpload() {
+            document.getElementById('upload-section').style.display = 'block';
+            document.getElementById('filter-section').style.display = 'none';
+        }
+
+        function toggleFilter() {
+            document.getElementById('upload-section').style.display = 'none';
+            document.getElementById('filter-section').style.display = 'block';
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('file-upload');
+            if (fileInput.files.length > 0) {
+                console.log('File selected:', fileInput.files[0].name);
+                // Add logic to upload the file here
+            } else {
+                console.log('No file selected.');
+            }
+        }
+
+        document.getElementById('dataFilter').addEventListener('change', function() {
+            const filterValue = this.value;
+            console.log('Filter selected:', filterValue);
+        });
+
+        document.getElementById('startDate').addEventListener('change', function() {
+            console.log('Start date selected:', this.value);
+        });
+
+        document.getElementById('endDate').addEventListener('change', function() {
+            console.log('End date selected:', this.value);
+        });
+
+        function toggleExpand(card) {
+            card.classList.toggle('expanded');
+        }
+        
+    </script>
+ <script>
+    window.onload = function() {
+        // Define the satisfaction score between 1 and 5
+        const averageSatisfaction = 4.2;  // Example value, replace with actual data
+        const maxScore = 5;
+
+        // Happiness level as a percentage
+        const happinessPercentage = (averageSatisfaction / maxScore) * 100;
+
+        // Initialize the horizontal bar chart
+        const happinessBarCtx = document.getElementById('happinessBarChart').getContext('2d');
+        const happinessBarChart = new Chart(happinessBarCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Happiness Level'],
+                datasets: [{
+                    data: [happinessPercentage],
+                    backgroundColor: '#4CAF50',
+                    borderColor: '#4CAF50',
+                    borderWidth: 1,
+                    maxBarThickness: 40
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal bar
+                responsive: true,
+                scales: {
+                    x: {
+                        max: 100, // 100% max
+                        ticks: { callback: function(value) { return value + '%' } }
+                    },
+                    y: { display: false } // Hide the y-axis label
+                },
+                plugins: {
+                    tooltip: { enabled: false },
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Display the score text
+        document.getElementById('happinessScoreText').innerText = `Happiness Level: ${averageSatisfaction}/5 (${happinessPercentage.toFixed(1)}%)`;
+    };
+</script>
+
+</body>
+</html>

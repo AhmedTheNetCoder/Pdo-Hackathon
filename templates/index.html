@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Emotion Engine</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e6f7f1, #f0f4ff);
+            color: #333;
+            font-family: 'DIN Next', 'Roboto', sans-serif;
+            position: relative;
+            overflow: auto;
+        }
+        .navbar-dark {
+            background-color: #17522b !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        h1, h2, p, a {
+            color: #333;
+        }
+        .filter-panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}"><img src="/static/images/IMG_7057.PNG" alt="Emotion Engine Logo">Emotion Engine</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Emotion Engine</h1>
+
+        <!-- Filter Panel -->
+        <div id="filter-section" class="filter-panel mt-4">
+            <h5>Filter Data Source</h5>
+            <div class="form-group">
+                <label for="dataFilter">Choose Data Source:</label>
+                <select class="form-control" id="dataFilter" onchange="navigateToPage()">
+                    <option value="all">All</option>
+                    <option value="twitter">All Social Media Platforms</option>
+                    <option value="surveys">Surveys</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="dateRange">Select Date Range:</label>
+                <input type="date" class="form-control" id="startDate">
+                <input type="date" class="form-control mt-2" id="endDate">
+            </div>
+            
+            <!-- Hidden Input for Redirect URL -->
+            <input type="hidden" id="redirectUrl" value="{{ url_for('index2') }}">
+            
+            <!-- Upload Section -->
+            <div id="upload-section" class="mt-4">
+                <h5>Upload Excel File</h5>
+                <div class="form-group">
+                    <label for="file-upload">Choose an Excel File:</label>
+                    <input type="file" class="form-control-file" id="file-upload" accept=".xlsx, .xls">
+                    <button class="btn btn-success mt-2" onclick="uploadFile()">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('file-upload');
+            if (fileInput.files.length > 0) {
+                const redirectUrl = document.getElementById('redirectUrl').value;
+                window.location.href = redirectUrl;
+            } else {
+                alert('Please select a file to upload.');
+            }
+        }
+    </script>
+<script>
+    function navigateToPage() {
+        const selectedValue = document.getElementById('dataFilter').value;
+        if (selectedValue === 'twitter') {
+            // Redirect to the Flask route for index3.html
+            window.location.href = "{{ url_for('index3') }}";
+        }
+    }
+</script>
+
+
+</body>
+</html>
