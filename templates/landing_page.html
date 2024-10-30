@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        /* Full-page image background */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('/static/images/BG 02.jpg') no-repeat center center fixed; /* Replace with your image path */
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Transparent button */
+        .center-button {
+            background-color: rgba(255, 255, 255, 0.5); /* semi-transparent */
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .center-button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <!-- Button that redirects to the index route -->
+    <button class="center-button" onclick="redirectToHome()"></button>
+
+    <script>
+        function redirectToHome() {
+            window.location.href = "{{ url_for('home') }}"; // Flask-generated URL for the homepage
+        }
+    </script>
+</body>
+</html>

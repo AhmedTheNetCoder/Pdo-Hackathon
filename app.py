@@ -13,6 +13,10 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+@app.route('/landing')
+def landing_page():
+    return render_template('landing_page.html')
+
 # Route for the Network Graph page
 @app.route('/network-graph')
 def network_graph():
