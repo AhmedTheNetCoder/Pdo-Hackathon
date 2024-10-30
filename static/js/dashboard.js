@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: ['Positive', 'Neutral', 'Negative'],
             datasets: [{
                 label: 'Sentiment Distribution',
-                data: [1530, 2501, 500],  // Placeholder data
+                data: [540, 202, 383],  // Placeholder data
                 backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
                 borderWidth: 1
             }]
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
             maintainAspectRatio: false,
         }
     });
-    
 
     // Sentiment Trend Over Time Chart
     const trendCtx = document.getElementById('trendChart').getContext('2d');

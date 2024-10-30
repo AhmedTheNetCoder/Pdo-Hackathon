@@ -130,13 +130,13 @@
             <div class="col-md-4">
                 <div class="small-card">
                     <h5>Total Sentiments</h5>
-                    <p>3500</p>
+                    <p>126</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="small-card">
-                    <h5>Average Responses</h5>
-                    <p>10</p>
+                    <h5>Average Sentiments Scale</h5>
+                    <p>84% - Positive</p>
                 </div>
             </div>
         </div>
@@ -147,7 +147,7 @@
                 <a href="{{ url_for('Pdo_Hackathon') }}">
                     <div id="chart-container" class="chart-box" onclick="toggleExpand(this)">
                         <div class="card-header">Survey Sentiment Overview</div>
-                        <canvas id="sentimentChart" style="max-height: 350px;"></canvas>
+                        <canvas id="sentimentChart1" style="max-height: 350px;"></canvas>
                     </div>
                 </a>
             </div>
@@ -232,11 +232,11 @@
         }
         
     </script>
- <script>
+<script>
     window.onload = function() {
-        // Define the satisfaction score between 1 and 5
-        const averageSatisfaction = 4.2;  // Example value, replace with actual data
-        const maxScore = 5;
+        // Define the satisfaction score and max score
+        const averageSatisfaction = 106;  // Example value
+        const maxScore = 126;  // Set max score to 125
 
         // Happiness level as a percentage
         const happinessPercentage = (averageSatisfaction / maxScore) * 100;
@@ -272,10 +272,43 @@
             }
         });
 
-        // Display the score text
-        document.getElementById('happinessScoreText').innerText = `Happiness Level: ${averageSatisfaction}/5 (${happinessPercentage.toFixed(1)}%)`;
+        // Display the score text with max score of 125
+        document.getElementById('happinessScoreText').innerText = `Happiness Level: ${averageSatisfaction}/${maxScore} (${happinessPercentage.toFixed(1)}%)`;
     };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sentiment Distribution Chart
+        const sentimentCtx = document.getElementById('sentimentChart1').getContext('2d');
+        const sentimentChart = new Chart(sentimentCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    label: 'Sentiment Distribution',
+                    data: [106, 8, 12],  // Placeholder data
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    });
 </script>
+<script>
+    window.embeddedChatbotConfig = {
+    chatbotId: "BZRU0PlcDbRfgaH9JoavG",
+    domain: "www.chatbase.co"
+    }
+    </script>
+    <script
+    src="https://www.chatbase.co/embed.min.js"
+    chatbotId="BZRU0PlcDbRfgaH9JoavG"
+    domain="www.chatbase.co"
+    defer>
+    </script>
 
 </body>
 </html>

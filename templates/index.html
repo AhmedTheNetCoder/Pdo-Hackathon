@@ -31,6 +31,21 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 9999;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -69,12 +84,6 @@
                 </select>
             </div>
             
-            <div class="form-group">
-                <label for="dateRange">Select Date Range:</label>
-                <input type="date" class="form-control" id="startDate">
-                <input type="date" class="form-control mt-2" id="endDate">
-            </div>
-            
             <!-- Hidden Input for Redirect URL -->
             <input type="hidden" id="redirectUrl" value="{{ url_for('index2') }}">
             
@@ -90,27 +99,43 @@
         </div>
     </div>
 
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        Loading, please wait...
+    </div>
+
     <script>
         function uploadFile() {
             const fileInput = document.getElementById('file-upload');
             if (fileInput.files.length > 0) {
-                const redirectUrl = document.getElementById('redirectUrl').value;
-                window.location.href = redirectUrl;
+                document.getElementById('loading-overlay').style.display = 'flex'; // Show loading overlay
+                setTimeout(() => {
+                    const redirectUrl = document.getElementById('redirectUrl').value;
+                    window.location.href = redirectUrl;
+                }, 3000); // Wait for 3 seconds before redirecting
             } else {
                 alert('Please select a file to upload.');
             }
         }
-    </script>
-<script>
-    function navigateToPage() {
-        const selectedValue = document.getElementById('dataFilter').value;
-        if (selectedValue === 'twitter') {
-            // Redirect to the Flask route for index3.html
-            window.location.href = "{{ url_for('index3') }}";
+
+        function navigateToPage() {
+            const selectedValue = document.getElementById('dataFilter').value;
+            if (selectedValue === 'twitter') {
+                window.location.href = "{{ url_for('index3') }}";
+            }
         }
-    }
-</script>
-
-
+    </script>
+    <script>
+        window.embeddedChatbotConfig = {
+        chatbotId: "BZRU0PlcDbRfgaH9JoavG",
+        domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="BZRU0PlcDbRfgaH9JoavG"
+        domain="www.chatbase.co"
+        defer>
+    </script>
 </body>
 </html>
