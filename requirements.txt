@@ -1,0 +1,6 @@
+Flask==2.2.2
+gunicorn==20.1.0
+pandas==1.5.3       # For data processing
+numpy==1.23.5       # For numerical operations
+matplotlib==3.6.2   # For data visualization
+sqlalchemy==1.4.39  # For database handling
