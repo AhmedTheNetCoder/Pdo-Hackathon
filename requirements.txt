@@ -1,6 +1,12 @@
-Flask==2.2.2
+Flask==2.3.2
 gunicorn==20.1.0
-pandas==1.5.3       # For data processing
-numpy==1.23.5       # For numerical operations
-matplotlib==3.6.2   # For data visualization
-sqlalchemy==1.4.39  # For database handling
+Werkzeug==2.3.7
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+itsdangerous==2.1.2
+click==8.1.3
+pandas==1.5.3
+numpy==1.23.5
+sqlalchemy==1.4.39
+matplotlib==3.6.2
+
